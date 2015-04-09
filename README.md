@@ -24,3 +24,4 @@ now
           困难：F12也找不到对应的元素  
           利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453
 
+参考资料：jsoup api<http://www.brieftools.info/document/jsoup/>
