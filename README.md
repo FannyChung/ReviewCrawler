@@ -20,5 +20,6 @@
 ###模拟搜索获取多个商品url    
 1. ~~模拟搜索~~  
 2. 加入多个url  
+          困难：F12也找不到对应的元素
           利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453
 
