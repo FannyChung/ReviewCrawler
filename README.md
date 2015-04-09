@@ -15,7 +15,8 @@
 2. 用for构造url，加入爬取集合   
         利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453
 
-###商品页面转评论页面    now
+###商品页面转评论页面    
+now
 
 ###模拟搜索获取多个商品url    
 1. ~~模拟搜索~~  
