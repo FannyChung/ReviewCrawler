@@ -36,7 +36,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * 
  * @author hu
  */
-public class AmazonCrawler extends DeepCrawler {
+public class TutorialCrawler extends DeepCrawler {
 	BufferedWriter bufferWritter;
     /*2.x版本中，爬虫的遍历由用户自定义(本质还是广度遍历，但是每个页面
      生成的URL，也就是遍历树中每个节点的孩子节点，是由用户自定义的)。
@@ -56,7 +56,7 @@ public class AmazonCrawler extends DeepCrawler {
     /*
      * 构造函数
      */
-    public AmazonCrawler(String crawlPath) {
+    public TutorialCrawler(String crawlPath) {
         super(crawlPath);
         regexRule.addRule("http://.*amazon.cn/.*");
     }
@@ -69,7 +69,6 @@ public class AmazonCrawler extends DeepCrawler {
     	String reviewReg="div[style=margin-left:0.5em;]";
     	String textReg=".reviewText";
     	String levelReg="span[class~=swSprite s_star_.*]";
-    	String titleRegA="span[style=vertical-align:middle;]";
     	String titleReg="b";
     	String timeReg="nobr";
     	String userReg="span[style = font-weight: bold;]";
@@ -96,11 +95,13 @@ public class AmazonCrawler extends DeepCrawler {
     		System.out.println(level);
     		review.setLevel(level);
     		
-    		Elements titleElements=element.select(titleRegA);//获取评论的标题
-    		cString=titleElements.select(titleReg).text();
+    		Elements titleEle=element.select(titleReg);
+    		cString=titleEle.get(0).text();				//标题
     		System.out.println(cString);
     		review.setReTitle(cString);
-    		cString=titleElements.select(timeReg).text();						//获取日期
+    		
+    		Elements timeEle=element.select(timeReg);
+    		cString=timeEle.get(0).text();						//获取日期
     		System.out.println(cString);
     		SimpleDateFormat s = new SimpleDateFormat(dateFormat);
     		Date d=null; 
@@ -169,7 +170,7 @@ public class AmazonCrawler extends DeepCrawler {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        AmazonCrawler crawler = new AmazonCrawler("/home/hu/data/az");
+        TutorialCrawler crawler = new TutorialCrawler("/home/hu/data/az");
         crawler.setThreads(50);
         crawler.addSeed("http://www.amazon.cn/product-reviews/B00OB5T26S/ref=cm_cr_dp_see_all_btm?ie=UTF8&showViewpoints=1&sortBy=bySubmissionDateDescending");
         Proxys proxys = new Proxys();
