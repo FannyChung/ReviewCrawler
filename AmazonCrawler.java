@@ -51,14 +51,14 @@ public class TutorialCrawler extends DeepCrawler {
     RegexRule regexRule = new RegexRule();
 
     JdbcTemplate jdbcTemplate = null;
-
+    private HashSet<String> allLinksHashSet=new HashSet<String>();
     Vector<Review> reviews=new Vector<Review>();
     /*
      * 构造函数
      */
     public TutorialCrawler(String crawlPath) {
         super(crawlPath);
-        regexRule.addRule("http://.*amazon.cn/.*");
+        regexRule.addRule("http://www.amazon.cn/product-reviews/.*");
     }
     
     /* (non-Javadoc)
@@ -124,7 +124,13 @@ public class TutorialCrawler extends DeepCrawler {
         System.out.println("============================================================");
         printText(reviews,"out");
         Links nextLinks = new Links();
-        nextLinks.addAllFromDocument(doc, regexRule);
+        Elements as = doc.select("span.paging>*").select("a[href]");
+        for (Element a : as) {
+            String href = a.attr("abs:href");
+        	System.out.println("获取-------------------\n"+href);
+            if(allLinksHashSet.add(href))
+            	nextLinks.add(href);
+        }
         return nextLinks;
     }
 
