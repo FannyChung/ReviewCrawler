@@ -26,8 +26,8 @@
           利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453
 
 ##参考资料：
-jsoup api<http://www.brieftools.info/document/jsoup/>  
-[github上的webcollector，有具体实现和例子](https://github.com/CrawlScript/WebCollector)
+[jsoup api](http://www.brieftools.info/document/jsoup/)  
+[github上的webcollector](https://github.com/CrawlScript/WebCollector)，有具体实现和例子
 
 ##日志：
 2015年4月10日：  
