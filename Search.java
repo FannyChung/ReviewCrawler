@@ -9,21 +9,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class SearchDemo2 {
 
 	public void search(String homepageString, String searchString) {
+		String inputReg="input[type=text]";
+		
 		HtmlUnitDriver driver = new HtmlUnitDriver();
 		driver.get(homepageString);
-		System.out.println("Page title is:" + driver.getTitle());
+		System.out.println("Page title is:" + driver.getTitle()+" url: "+driver.getCurrentUrl());
 		// 找到文本框
-		WebElement element = driver.findElement(By.cssSelector("input[type=text]"));
+		WebElement element = driver.findElement(By.cssSelector(inputReg));
 		// 输入搜索关键字
 		element.sendKeys(searchString);
 		element.submit();
-		System.out.println("Page title is:" + driver.getTitle());
-		(new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-			public Boolean apply(WebDriver d) {
-				return d.getTitle().toLowerCase().startsWith(searchString);
-			}
-		});
-		System.out.println("Page title is:" + driver.getTitle());
+		System.out.println("Page title is:" + driver.getTitle()+" url: "+driver.getCurrentUrl());
 		driver.quit();
 	}
 
