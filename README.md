@@ -28,6 +28,7 @@
 ##参考资料：
 [jsoup api](http://www.brieftools.info/document/jsoup/)  
 [github上的webcollector](https://github.com/CrawlScript/WebCollector)，有具体实现和例子
+[动态js获取](http://www.cnblogs.com/yhdino/p/3263219.html),搜索后获取多个商品url可能用到
 
 ##日志：
 2015年4月10日：  
