@@ -13,10 +13,11 @@
 ###遍历多页评论  
 1. 在商品评论页面第一页获取数字：页数    
 2. 用for构造url，加入爬取集合   
-        利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453
+        利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453  
+        存在问题：新版的Generator没有使用实例，涉及Environment类
 
-###商品页面转评论页面    
-now
+###~~商品页面转评论页面~~    
+
 
 ###模拟搜索获取多个商品url    
 1. ~~模拟搜索~~  
