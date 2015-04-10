@@ -27,7 +27,7 @@
 
 ##参考资料：
 jsoup api<http://www.brieftools.info/document/jsoup/>  
-github上的webcollector，有具体实现和例子[https://github.com/CrawlScript/WebCollector]
+[github上的webcollector，有具体实现和例子](https://github.com/CrawlScript/WebCollector)
 
 ##日志：
 2015年4月10日：  
