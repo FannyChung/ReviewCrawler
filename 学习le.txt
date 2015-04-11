@@ -1,0 +1,11 @@
+2.Q:大致讲解java集合的体系结构
+   A:List、Set、Map是这个集合体系中最主要的三个接口。
+      其中List和Set继承自Collection接口。
+      Set不允许元素重复。HashSet和TreeSet是两个主要的实现类。
+      List有序且允许元素重复。ArrayList、LinkedList和Vector是三个主要的实现类。
+      Map也属于集合系统，但和Collection接口不同。Map是key对value的映射集合，其中key列就是一个集合。key不能重复，但是value可以重复。HashMap、TreeMap和Hashtable是三个主要的实现类。
+      SortedSet和SortedMap接口对元素按指定规则排序，SortedMap是对key列进行排序。
+
+
+select的知识
+http://www.tuicool.com/articles/ZnyMvu
