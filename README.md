@@ -43,5 +43,5 @@ Amazon爬虫能够处理本页的评论信息，并获取相关的评论链接�
 不知道为什么，下午实验正确的“从商品页转到评论页”功能，晚上出错了，现象是：跳转的url中间多了一串数字，和手动点击跳转不同。  
 另外，存在的问题是有的链接对应网页的标题是'AMAZON CAPTCHA'。目前猜想可能是下午最后的一次运行访问亚马逊太多了，导致现在被拒绝？
 果然遇到了反爬虫：
- ![image](https://github.com/FannyChung/ReviewCrawler/pictures/pic1.jpg)
+ ![image](ReviewCrawler/pictures/pic1.jpg)
 即使只爬取一次也会遇见这种问题，估计是今天爬多了吧。有一次跑了太多了
