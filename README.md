@@ -15,7 +15,7 @@
 2. ~~获取多页的评论~~
       用for构造url，加入爬取集合   
         利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453  
-        存在问题：新版的Generator没有使用实例，涉及Environment类
+        存在问题：新版的Generator没有使用实例，涉及Environment类  
          使用的另一种方法：不断获取下一页，最大页数作为它的深度。这种方法比构造url的方法的扩展性强一些
 
 ###~~商品页面转评论页面~~    
