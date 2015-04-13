@@ -25,6 +25,7 @@ public class ReviewCrawler extends DeepCrawler {
 	private ArrayList<String> allLinksHashSet = new ArrayList<String>();// 记录所有遍历过的链接
 	private Vector<Review> reviews=new Vector<Review>(); // 只需要不断增加，所以使用vector
 	private int SLEEP_TIME = 10000;//防止访问过于频繁而设置的睡眠时间
+	MyLogger log1=new MyLogger("review.log");
 
 	/**
 	 * 构造函数
@@ -57,13 +58,14 @@ public class ReviewCrawler extends DeepCrawler {
 
 		Document doc = page.getDoc(); // 获取页面DOM
 		String title = doc.title(); // 获取网页标题
+		String url=page.getUrl();
 		if (title.matches(refusedTitle)) {
 			System.err
 					.println("访问过于频繁，被拒绝了！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
 			return null;
 		}
 		Elements ele1 = doc.select(reviewReg); // 获取评论相关信息的集合
-		System.out.println("URL:" + page.getUrl() + " \n标题:" + title);
+		System.out.println("URL:" + url + " \n标题:" + title);
 		// 延时，避免被反爬虫
 		try {
 			Thread.sleep(SLEEP_TIME);
@@ -115,6 +117,7 @@ public class ReviewCrawler extends DeepCrawler {
 			}
 			System.out
 					.println("处理完本页评论信息============================================================");
+			log1.info("处理完本页评论信息"+url);
 		}
 
 		Links nextLinks = new Links();

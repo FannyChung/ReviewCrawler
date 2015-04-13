@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import jxl.Workbook;
@@ -30,6 +31,8 @@ public class ProductReview extends DeepCrawler {
 	private final int SLEEP_TIME = 10000;
 	private int productNum = 0;
 	private WritableWorkbook book;
+	MyLogger log1=new MyLogger("producturl");
+	MyLogger log2=new MyLogger("sheet");
 
 	/**
 	 * @param crawlPath
@@ -50,11 +53,13 @@ public class ProductReview extends DeepCrawler {
 		String reviewUrlReg = "^http://www.amazon.cn/product-reviews/.*";// 评论网页url满足的正则式
 		String productUrlReg = "^http://www.amazon.cn/.*/dp/.*"; // 商品网页url的正则式
 		String reviewReg = "a[class=a-link-emphasis a-text-bold]"; // 商品网页中指向评论网页的元素格式
+		String nextPos="span.paging>*";					//下一页所在的元素格式
 
 		Links nextLinks = new Links();
 		org.jsoup.nodes.Document doc = page.getDoc();
 		String url = page.getUrl();
 		System.out.println("URL:\t" + url + "\n标题:\t" + doc.title() + "\n");
+		log1.info(url);
 		
 		if (doc.title().matches(refusedTitle)) {
 			System.err
@@ -71,10 +76,10 @@ public class ProductReview extends DeepCrawler {
 
 		if (Pattern.matches(reviewUrlReg, url)) { // 如果是评论页面，加入”下一页“指向的链接
 			// 获取最大页数，以设置评论爬虫的深度
-			Elements as = doc.select("span.paging>*");
+			Elements as = doc.select(nextPos);
 			if (as.isEmpty()) {
 				System.out
-						.println("没有其他评论页~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~只有一页评论");
+						.println("没有其他评论页~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~只有一页评论");
 				MAXNUM = 1;
 			} else {
 				String numString = as.get(as.size() - 2).text();
@@ -85,7 +90,7 @@ public class ProductReview extends DeepCrawler {
 					.println("加入Amazon的种子============================================");
 
 			// 启动爬取评论页的爬虫
-			ReviewCrawler crawler1 = new ReviewCrawler("/home/hu/data/az");
+			ReviewCrawler crawler1 = new ReviewCrawler(".review");
 			crawler1.addSeed(url);
 			crawler1.addToLinks(url);
 			crawler1.setThreads(1);
@@ -97,6 +102,8 @@ public class ProductReview extends DeepCrawler {
 			}
 			crawler1.printAllLinks();
 			WritableSheet sheet = book.createSheet(url, productNum);//设置表单名字和编号
+			log2.info("表单"+url+'\t'+productNum);
+			
 			try {
 				printReviews(crawler1.getReviews(), sheet);//将所有的评论打印到表格中
 			} catch (RowsExceededException e) {
