@@ -93,6 +93,7 @@ public class ProductReview extends DeepCrawler {
 				MAXNUM = Integer.parseInt(numString);
 			}
 			System.out.println("获取到页数：" + MAXNUM + '\n');
+			log1.info("页数："+MAXNUM);
 			System.out
 					.println("加入Amazon的种子============================================");
 
@@ -108,16 +109,19 @@ public class ProductReview extends DeepCrawler {
 				e.printStackTrace();
 			}
 			crawler1.printAllLinks();
-			WritableSheet sheet = book.createSheet(title, productNum);// 设置表单名字和编号
-			log2.info("表单" + url + '\t' + productNum);
-
-			try {
-				printReviews(crawler1.getReviews(), sheet);// 将所有的评论打印到表格中
-			} catch (RowsExceededException e) {
-				e.printStackTrace();
-			} catch (WriteException e) {
-				e.printStackTrace();
-			}
+			//打印该商品评论到表格中
+//			openFile("ttt"+productNum+".xls");
+//			WritableSheet sheet = book.createSheet(title, productNum);// 设置表单名字和编号
+//			log2.info("表单" + title + '\t' + productNum);
+//
+//			try {
+//				printReviews(crawler1.getReviews(), sheet);// 将所有的评论打印到表格中
+//			} catch (RowsExceededException e) {
+//				e.printStackTrace();
+//			} catch (WriteException e) {
+//				e.printStackTrace();
+//			}
+//			closeFile();
 			productNum++;
 		} else if (Pattern.matches(productUrlReg, url)) { // 如果是商品页面，加入”查看所有评论“对应的链接
 			Elements as = doc.select(reviewReg);
@@ -190,6 +194,8 @@ public class ProductReview extends DeepCrawler {
 		} catch (WriteException e) {
 			System.err.println("excel表关闭失败");
 			e.printStackTrace();
+		}catch (IndexOutOfBoundsException e) {
+			System.err.println("没有创建表单");
 		}
 	}
 
@@ -212,8 +218,7 @@ public class ProductReview extends DeepCrawler {
 			file.createNewFile();
 		}
 
-		// true = append file
-		FileWriter fileWritter = new FileWriter(file.getName(), true);
+		FileWriter fileWritter = new FileWriter(file.getName(), true);// true = append file
 		BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
 		Element listDiv = doc.getElementById("list");
 		Elements trs = listDiv.select("table tbody tr");

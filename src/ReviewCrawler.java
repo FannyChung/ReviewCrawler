@@ -28,11 +28,11 @@ public class ReviewCrawler extends DeepCrawler {
 	/**
 	 * 记录遍历过的评论页面url
 	 */
-	MyLogger log1=new MyLogger("review");
+	MyLogger log1=new MyLogger("reviewUrl");
 	/**
 	 * 记录收集到的评论信息
 	 */
-	MyLogger log2=new MyLogger("allReviews");
+	MyLogger log2=new MyLogger("allReviewInfo");
 
 	/**
 	 * 构造函数
@@ -136,7 +136,7 @@ public class ReviewCrawler extends DeepCrawler {
 			System.out.println("没找到其他评论页面的超链接！！！！！！！！本评论只有一页");
 		} else {
 			String href = as.last().attr("abs:href"); // 获取指向其他评论页的超链接的最后一个
-			System.out.println("Amazon获取-------------------" + href + '\n');
+			System.out.println("获取下一页评论-------------------" + href + '\n');
 			if (href.matches(nextReview)) { // 检查是否是“下一页”，如果是，则需要进行爬取
 				nextLinks.add(href);
 				allLinksHashSet.add(href);
