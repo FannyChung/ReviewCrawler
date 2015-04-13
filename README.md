@@ -11,19 +11,22 @@
     * 京东   
 
 ###遍历多页评论  
-1. 在商品评论页面第一页获取数字：页数    
-2. 用for构造url，加入爬取集合   
+1. ~~在商品评论页面第一页获取数字：页数~~    
+2. ~~获取多页的评论~~
+      用for构造url，加入爬取集合   
         利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453  
         存在问题：新版的Generator没有使用实例，涉及Environment类
+         使用的另一种方法：不断获取下一页，最大页数作为它的深度。这种方法比构造url的方法的扩展性强一些
 
 ###~~商品页面转评论页面~~    
 
 
-###模拟搜索获取多个商品url    
+###~~模拟搜索获取多个商品url~~    
 1. ~~模拟搜索~~  
-2. 加入多个url  
+2. ~~加入多个url~~  
           困难：F12也找不到对应的元素  
-          利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453
+          利用任务生成器 http://blog.csdn.net/ajaxhu/article/details/38787453  
+         最后是用模拟浏览器行为的selenium包获取webelement的方法解决的。比较方便，可以直接获取输入框，然后提交表单
 
 ##参考资料：
 [jsoup api](http://www.brieftools.info/document/jsoup/)  
