@@ -19,8 +19,8 @@ public class ReivewWebDriver {
 
 	/**
 	 * 获取下一页评论
-	 * 
-	 * @param thisPage
+	 * 处理评论信息
+	 * @param thisPage当前评论页
 	 */
 	public void nextPage(String thisPage) {
 		String nextp = null;
@@ -29,11 +29,10 @@ public class ReivewWebDriver {
 		String levelReg = "span";// 评论等级
 		String titleReg = "b"; // 评论标题
 		String timeReg = "nobr"; // 评论时间
-		String userReg = "span[style = font-weight: bold;]";// 评论用户
 		String dateFormat = "yyyy年MM月dd日"; // 时间格式
+		
 		driver.get(thisPage);
-		// System.out.println("Page title is:" +
-		// driver.getTitle()+" url: "+driver.getCurrentUrl());
+		
 		// 处理评论信息
 		List<WebElement> ele1 = driver
 				.findElementsByCssSelector(reviewReg);
@@ -70,15 +69,10 @@ public class ReivewWebDriver {
 			}
 			review.setTime(d);
 
-//			WebElement userElements = element.findElement(By
-//					.cssSelector(userReg));// 获取评论者名称
-//			cString = userElements.getText();
-//			// System.out.println(cString);
-//			review.setUserName(cString);
-
 			reviews.add(review);
 		}
 
+		//获取下一页评论链接
 		WebElement element = null;
 		try {
 			element= driver.findElementByPartialLinkText("下一页");
@@ -89,7 +83,6 @@ public class ReivewWebDriver {
 		nextp = element.getAttribute("href");
 		System.out.println(nextp);
 		nextPage(nextp);
-//		return nextp;
 	}
 
 	/**
@@ -117,11 +110,11 @@ public class ReivewWebDriver {
 		HashSet<ProductUrl> productsStrings=search.getProductPage(s);//获取搜索后得到的所有商品url
 		ReivewWebDriver nDriver = new ReivewWebDriver();
 		
-		ProductReview productReview = new ProductReview("test");
+		ProductReview productReview = new ProductReview("。productdriver");
 		WritableSheet sheet = null;
 		productReview.openFile("t.xls");
 		int i=0;
-		int productNum=5;
+		int productNum=5;//需要的商品数目
 		for (ProductUrl productUrl : productsStrings) {
 			if (i==productNum) {
 				break;

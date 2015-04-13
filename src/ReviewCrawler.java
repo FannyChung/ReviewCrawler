@@ -25,7 +25,14 @@ public class ReviewCrawler extends DeepCrawler {
 	private ArrayList<String> allLinksHashSet = new ArrayList<String>();// 记录所有遍历过的链接
 	private Vector<Review> reviews=new Vector<Review>(); // 只需要不断增加，所以使用vector
 	private int SLEEP_TIME = 10000;//防止访问过于频繁而设置的睡眠时间
-	MyLogger log1=new MyLogger("review.log");
+	/**
+	 * 记录遍历过的评论页面url
+	 */
+	MyLogger log1=new MyLogger("review");
+	/**
+	 * 记录收集到的评论信息
+	 */
+	MyLogger log2=new MyLogger("allReviews");
 
 	/**
 	 * 构造函数
@@ -112,7 +119,9 @@ public class ReviewCrawler extends DeepCrawler {
 				cString = userElements.get(0).text();
 				// System.out.println(cString);
 				review.setUserName(cString);
-
+				
+				
+				log2.info(review.getText()+'\t'+review.getLevel()+'\t'+review.getReTitle()+'\t'+review.getUserName()+'\t'+review.getTime());
 				reviews.add(review);
 			}
 			System.out

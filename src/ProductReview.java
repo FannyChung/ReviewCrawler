@@ -1,7 +1,8 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import jxl.Workbook;
@@ -19,7 +20,6 @@ import org.jsoup.select.Elements;
 import cn.edu.hfut.dmic.webcollector.crawler.DeepCrawler;
 import cn.edu.hfut.dmic.webcollector.model.Links;
 import cn.edu.hfut.dmic.webcollector.model.Page;
-import cn.edu.hfut.dmic.webcollector.net.Proxys;
 
 /**
  * @author Fanny
@@ -31,8 +31,14 @@ public class ProductReview extends DeepCrawler {
 	private final int SLEEP_TIME = 10000;
 	private int productNum = 0;
 	private WritableWorkbook book;
-	MyLogger log1=new MyLogger("producturl");
-	MyLogger log2=new MyLogger("sheet");
+	/**
+	 * 记录遍历的商品url
+	 */
+	MyLogger log1 = new MyLogger("producturl");
+	/**
+	 * 记录已经创建的表单名和编号
+	 */
+	MyLogger log2 = new MyLogger("sheet");
 
 	/**
 	 * @param crawlPath
@@ -53,20 +59,21 @@ public class ProductReview extends DeepCrawler {
 		String reviewUrlReg = "^http://www.amazon.cn/product-reviews/.*";// 评论网页url满足的正则式
 		String productUrlReg = "^http://www.amazon.cn/.*/dp/.*"; // 商品网页url的正则式
 		String reviewReg = "a[class=a-link-emphasis a-text-bold]"; // 商品网页中指向评论网页的元素格式
-		String nextPos="span.paging>*";					//下一页所在的元素格式
+		String nextPos = "span.paging>*"; // 下一页所在的元素格式
 
 		Links nextLinks = new Links();
 		org.jsoup.nodes.Document doc = page.getDoc();
 		String url = page.getUrl();
-		System.out.println("URL:\t" + url + "\n标题:\t" + doc.title() + "\n");
+		String title = doc.title();
+		System.out.println("URL:\t" + url + "\n标题:\t" + title + "\n");
 		log1.info(url);
-		
+
 		if (doc.title().matches(refusedTitle)) {
 			System.err
 					.println("访问过于频繁，被拒绝了！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
 			return null;
 		}
-		
+
 		// 延时，避免被反爬虫
 		try {
 			Thread.sleep(SLEEP_TIME);
@@ -101,11 +108,11 @@ public class ProductReview extends DeepCrawler {
 				e.printStackTrace();
 			}
 			crawler1.printAllLinks();
-			WritableSheet sheet = book.createSheet(url, productNum);//设置表单名字和编号
-			log2.info("表单"+url+'\t'+productNum);
-			
+			WritableSheet sheet = book.createSheet(title, productNum);// 设置表单名字和编号
+			log2.info("表单" + url + '\t' + productNum);
+
 			try {
-				printReviews(crawler1.getReviews(), sheet);//将所有的评论打印到表格中
+				printReviews(crawler1.getReviews(), sheet);// 将所有的评论打印到表格中
 			} catch (RowsExceededException e) {
 				e.printStackTrace();
 			} catch (WriteException e) {
@@ -138,17 +145,17 @@ public class ProductReview extends DeepCrawler {
 			throws RowsExceededException, WriteException {
 		int col = 0;
 		Label newLabel;
-//		newLabel=new Label(0,0,"文本");
+		// newLabel=new Label(0,0,"文本");
 		for (Review review : reviews) {
-			newLabel = new Label(0,col,  review.getText());
+			newLabel = new Label(0, col, review.getText());
 			sheet.addCell(newLabel);
-			newLabel = new Label( 1,col, review.getLevel() + "");
+			newLabel = new Label(1, col, review.getLevel() + "");
 			sheet.addCell(newLabel);
-			newLabel = new Label( 2,col, review.getReTitle());
+			newLabel = new Label(2, col, review.getReTitle());
 			sheet.addCell(newLabel);
-			newLabel = new Label( 3,col, review.getTime().toString());
+			newLabel = new Label(3, col, review.getTime().toString());
 			sheet.addCell(newLabel);
-			newLabel = new Label(4,col,  review.getUserName());
+			newLabel = new Label(4, col, review.getUserName());
 			sheet.addCell(newLabel);
 			col++;
 			System.out.println("excel--------------------------------" + col);
@@ -156,7 +163,7 @@ public class ProductReview extends DeepCrawler {
 	}
 
 	/**
-	 * 打开文件
+	 * 打开excel文件
 	 * 
 	 * @param fileName
 	 */
@@ -171,7 +178,7 @@ public class ProductReview extends DeepCrawler {
 	}
 
 	/**
-	 * 关闭文件
+	 * 关闭excel文件
 	 */
 	public void closeFile() {
 		try {
@@ -185,37 +192,38 @@ public class ProductReview extends DeepCrawler {
 			e.printStackTrace();
 		}
 	}
+
 	public WritableWorkbook getBook() {
 		return book;
 	}
 
-	/**
-	 * 为crawler设置代理
-	 * 
-	 * @param crawler
+	/**从网站上获取代理，存入到文件中
+	 * @param dlWebUrl "http://www.kuaidaili.com/free/inha/" + i
+	 * @param filename "proxys.txt"
+	 * @throws IOException
 	 */
-	public static void setPro(DeepCrawler crawler) {
-		Proxys proxys = new Proxys();
-		for (int i = 1; i < 30; i++) {
-			String dlWebUrl = "http://www.kuaidaili.com/free/inha/" + i;
-			Document doc = null;
-			try {
-				doc = Jsoup.connect(dlWebUrl).timeout(5000).get();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Element listDiv = doc.getElementById("list");
-			Elements trs = listDiv.select("table tbody tr");
-			for (final Element tr : trs) {
-				String ip = tr.child(0).text();
-				int port = Integer.parseInt(tr.child(1).text());
-				System.out.println("代理：" + ip + "\nport: " + port);
-				proxys.add(ip, port);
-			}
+	public void getProxyOnline(String dlWebUrl, String filename)
+			throws IOException {
+		// String dlWebUrl = "http://www.kuaidaili.com/free/inha/" + i;
+		Document doc = null;
+		doc = Jsoup.connect(dlWebUrl).timeout(5000).get();
+		File file = new File(filename);
+		if (!file.exists()) {
+			file.createNewFile();
 		}
-		crawler.setProxys(proxys);
 
-		crawler.setRetry(10);
+		// true = append file
+		FileWriter fileWritter = new FileWriter(file.getName(), true);
+		BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+		Element listDiv = doc.getElementById("list");
+		Elements trs = listDiv.select("table tbody tr");
+		for (final Element tr : trs) {
+			String ip = tr.child(0).text();
+			int port = Integer.parseInt(tr.child(1).text());
+			bufferWritter.write(ip + ":" + port);
+			bufferWritter.newLine();
+		}
+		bufferWritter.close();
 	}
 	// public static void main(String[] args) throws Exception {
 	// ItemRevDemo crawler = new ItemRevDemo("/home/hu/data/az123");

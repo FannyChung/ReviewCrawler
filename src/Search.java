@@ -52,7 +52,7 @@ public class Search {
 		List<WebElement> link=driver.findElements(By.cssSelector("[href]"));//获取带有超链接的元素
 		for (WebElement webElement : link) {
 			String href=webElement.getAttribute("href");					//获取超链接对应的String
-			if(href.matches(productUrlReg)&&products.add(new ProductUrl(href))){//获取商品url，加入集合中，url对应的商品不同
+			if(href.matches(productUrlReg)&&products.add(new ProductUrl(href))){//获取商品url，加入集合中，同一个商品的多个url不重复添加
 				System.out.println(webElement.getText()+'\t'+href);
 			}
 		}
